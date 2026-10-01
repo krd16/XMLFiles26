@@ -1,7 +1,12 @@
 package ui;
 
+import controllers.ReadXML;
+import models.Car;
+import models.Dealership;
 import myLib.UserMethods;
+import org.xml.sax.SAXException;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Scanner;
 
@@ -19,7 +24,7 @@ public class MainMenu {
             userMethods.myPrinter("2. Read XML file using SAX");
             userMethods.myPrinter("3. Read XML file using JAXB");
             userMethods.myPrinter("4. Write XML file using JAXB");
-            userMethods.myPrinter("0. Salir");
+            userMethods.myPrinter("0. Exit");
             processOption(requestOption());
         }while(!exitMenu);
     }
@@ -29,11 +34,31 @@ public class MainMenu {
 
     private void processOption(String option){
         UserMethods userMethods = new UserMethods();
+
         switch(option){
             case "0" -> exitMenu = true;
             case "1" -> {
                 Path p = userMethods.fileToRead("Introduce the path to the file to be read with DOM: ");
+                ReadXML readXML = new ReadXML();
 
+                try {
+                    Dealership dealership = readXML.readDealership(p);
+
+                    for (Car car : dealership.getCars()) {
+                        System.out.println(
+                                car.getId() + "\n"
+                                        + car.getBrand() + "\n"
+                                        + car.getModel() + "\n"
+                                        + car.getEngineDisplacement() + "\n\n"
+                        );
+                    }
+                } catch (IOException e) {
+                    System.out.println("Error while reading file.");
+                } catch (SAXException e) {
+                    System.out.println("Error while reading XML file, maybe the structure is not correct?");
+                } catch (NumberFormatException e) {
+                    System.out.println("Error while parsing engine displacement to float.");
+                }
             }
             case "2" -> {
                 Path p = userMethods.fileToRead("Introduce the path to the file to be read with SAX: ");

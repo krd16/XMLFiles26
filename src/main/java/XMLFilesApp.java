@@ -1,8 +1,8 @@
 import ui.MainMenu;
 
 
-    static void main() {
-        MainMenu mainMenu = new MainMenu();
-        mainMenu.showMenu();
-    }
+void main() {
+    MainMenu mainMenu = new MainMenu();
+    mainMenu.showMenu();
+}
 
